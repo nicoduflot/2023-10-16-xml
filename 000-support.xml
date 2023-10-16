@@ -115,3 +115,223 @@ Dublin Core
 
 
 -->
+
+<!-- DTD -->
+
+
+<!ELEMENT balise (contenu)>
+
+<!-- Balise contenant une autre balise -->
+<contact>
+    <nom>Durant</nom>
+</contact>
+<!-- pour la balise contact -->
+<!ELEMENT contact (nom)>
+<!-- pour la balise nom -->
+<!ELEMENT nom (#PCDATA)>
+<!-- Si la balise nom est vide -->
+<!ELEMENT nom EMPTY>
+<!-- une balise vide avec un attribut -->
+<!-- Les attributs -->
+<!ELEMENT balise (contenu)>
+    <!ATTLIST balise attr>
+
+<console src="test" />
+<!ELEMENT console EMPTY>
+    <!ATTLIST console src CDATA>
+
+<!-- si la balise peut ou non avoir des données -->
+<!ELEMENT nom ANY>
+<!-- si la balise peut contenir plusieurs itérations d'une même balise -->
+<!ELEMENT rolodex (contact+)>
+
+<!-- avec le xml suivant -->
+<rolodex>
+    <contact>
+        <nom>Durand</nom>
+        <prenom>Jean</prenom>
+        <age>42</age>
+    </contact>
+    <contact>
+        <nom>ACME Inc</nom>
+        <prenom></prenom>
+        <age></age>
+    </contact>
+</rolodex>
+
+<!ELEMENT rolodex (contact+)>
+    <!ELEMENT contact (nom, prenom, age)>
+        <!ELEMENT nom (#PCDATA)>
+        <!ELEMENT prenom (#PCDATA)>
+        <!ELEMENT age (#PCDATA)>
+<!-- on peut avoir plusieurs contenus possible dans une balise -->
+
+<!ELEMENT rolodex (contact+)>
+    <!ELEMENT contact (nom | prenom, age)>
+    <!-- ici, contact doit contenir soit un nom ou soit un prenom et age -->
+    <!ELEMENT nom (#PCDATA)>
+    <!ELEMENT prenom (#PCDATA)>
+    <!ELEMENT age (#PCDATA)>
+    
+<!-- balise optionnelles : qu'elle apparaissent ou non -->
+<!ELEMENT contact (nom, prenom?, adresses, emails)>
+<!-- ici, la balise prénom peut ne pas apparaître -->
+
+<!-- balise optionnelles répétées -->
+<!ELEMENT adresses (adresse*)>
+<!-- ici, la balise adresses peut contenir de 0 à X adresse -->
+
+<!-- balise obligatoires répétées -->
+<!ELEMENT rolodex (contact+)>
+<!-- ici, rolodex doit contenir au moins une balise contact et peut en contenir plus -->
+
+<!-- Les attributs -->
+<!ELEMENT balise (contenu)>
+    <!ATTLIST balise attr >
+
+<!-- identifiant unique -->
+<contact numero="n-1"></contact>
+<!ELEMENT contact ANY>
+    <!ATTLIST contact numero ID #REQUIRED>
+<!-- la balise contact possède un attribut numéro qui est une attribut ID qui est unique et obligatoire -->
+
+<!-- 
+    Propriété de présence des attributs
+    forme               signification
+    #IMPLIED            Attribut facultatif
+    #REQUIRED           Attribut obligatoire
+    #FIXED valeur       Attribut avec cette valeur, non modifiable
+    "valeur"            Attribut avec cette valeur par défaut et modifiable
+-->
+
+<!-- Attribut ayant pour référence (qui fait référence à) un attribut a valeur unique -->
+<!ELEMENT contact ANY>
+    <!ATTLIST contact numero ID #REQUIRED>
+<!ELEMENT adresse ANY>
+    <!ATTLIST adresse userAdresse IDREF #REQUIRED>
+    <!ATTLIST adresse personne (physique | morale) "physique">
+<rolodex>
+    <contacts>
+        <contact personne="physique" numero="n-1">
+            ....
+        </contact>
+        <contact personne="morale" numero="n-2">
+            ....
+        </contact>
+    </contacts>
+    <adresses>
+        <adresse type="facturation" userAdresse="n-1">
+            ....
+        </adresse>
+        <adresse type="livraison" userAdresse="n-1">
+            ....
+        </adresse>
+        <adresse type="facturation" userAdresse="n-2">
+            ....
+        </adresse>
+    </adresses>
+</rolodex>
+
+<!-- autre exemple -->
+<artist name="Nick Cave" artistID="NC"/>
+<album name="Murder Ballads" albumArtistID="NC"/>
+
+<!ELEMENT artist EMPTY>
+    <!ATTLIST artist name CDATA #REQUIRED>
+    <!ATTLIST artist artistID ID #REQUIRED>
+<!ELEMENT album EMPTY>
+    <!ATTLIST album name CDATA #REQUIRED>
+    <!ATTLIST album albumArtistID IDREF #IMPLIED>
+
+<!-- attribut avec une valeur par dfaut -->
+<!ATTLIST adresse personne (physique | morale) "physique">
+<!-- valide -->
+<contact personne="physique"></contact>
+
+<!-- valide -->
+<contact personne="morale"></contact>
+
+<!-- invalide -->
+<contact personne="toto"></contact>
+
+<!-- valide mais sera considéré par défaut comme physique -->
+<contact personne=""></contact>
+
+<!-- 
+    les constantes : si l'attribut est présent dans la balise, il doit avoir une valeur définie. 
+    Mais s'il n'est pas présent, cette valeur sera celle utilisée par défaut
+-->
+<!ATTLIST prix devise CDATA "euro">
+<!-- valide la devise sera euro et rien d'autre -->
+<prix devise="euro">12</prix>
+<!-- valide la devise sera euro et rien d'autre -->
+<prix>12</prix>
+
+<!-- invalide : la devise doit être en euro -->
+<prix devise="USD">12</prix>
+
+<!-- 
+    Les entités 
+    se sont des alias qui permettent de réutiliser des informations dans le document xml ou dans les DTD
+        - générales
+        - paramètres
+        - externes
+-->
+
+<!-- 
+    entité générale
+    associe un alias à une information dans le document
+-->
+
+<!ENTITY dacia "Dacia">
+<!ENTITY renault "Renault">
+<!ENTITY citroen "Citroën">
+
+<voiture>
+    <marque>&dacia</marque>
+</voiture>
+<voiture>
+    <marque>&renault</marque>
+</voiture>
+<voiture>
+    <marque>&citroen</marque>
+</voiture>
+
+<!-- 
+    le xml est à lire comme suit
+-->
+
+<voiture>
+    <marque>Dacia</marque>
+</voiture>
+<voiture>
+    <marque>Renault</marque>
+</voiture>
+<voiture>
+    <marque>Citroën</marque>
+</voiture>
+
+<!-- 
+    entité paramètre
+    N'apparaît que dans les DTD
+    Elle associent un alias à une partie de la déclaration dans les DTD
+-->
+
+<voiture marque="Dacia" />
+<voiture marque="Renault" />
+<voiture marque="Citroën" />
+<!-- DTD classique pour l'attribut marque -->
+<!ATTLIST voiture marque (Dacia|Renault|Citroën) #REQUIRED>
+
+<!-- avec l'entité paramètre -->
+<!ENTITY % listeMarques "marque (Dacia|Renault|Citroën) #REQUIRED">
+<!ATTLIST voiture %listeMarques>
+
+<!-- autre exemple -->
+<!ENTITY % type "nom?, prenom?">
+<!ELEMENT contact (%type, surnom?)>
+<!ELEME?T personnage (%type, role)>
+
+<!-- traduit en DTD classique -->
+<!ELEMENT contact (nom?, prenom?, surnom?)>
+<!ELEME?T personnage (nom?, prenom?, role)>
