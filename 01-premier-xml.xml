@@ -19,31 +19,31 @@ Standalone : l'autonomie du document, est-ce que le document est rattaché à un
         <nom>Durand</nom>
         <prenom>Jean</prenom>
         <adresses>
-            <adresse type="">
-                <numero></numero>
-                <voie type=""></voie>
-                <codepostal></codepostal>
-                <ville></ville>
-                <pays codeLang=""></pays>
+            <adresse type="facturation">
+                <numero>7</numero>
+                <voie type="Impasse">Impasse du chemin</voie>
+                <codepostal>75015</codepostal>
+                <ville>Paris</ville>
+                <pays codeLang="fr-FR">FRANCE</pays>
             </adresse>
-            <adresse type="">
-                <numero></numero>
-                <voie type=""></voie>
-                <codepostal></codepostal>
-                <ville></ville>
-                <pays codeLang=""></pays>
+            <adresse type="livraison">
+                <numero>7</numero>
+                <voie type="Impasse">Impasse du chemin</voie>
+                <codepostal>75015</codepostal>
+                <ville>Paris</ville>
+                <pays codeLang="fr-FR">FRANCE</pays>
             </adresse>
-            <adresse type="">
-                <numero></numero>
-                <voie type=""></voie>
-                <codepostal></codepostal>
-                <ville></ville>
-                <pays codeLang=""></pays>
+            <adresse type="livraison">
+                <numero>1</numero>
+                <voie type="rue">Rue de la paix</voie>
+                <codepostal>75001</codepostal>
+                <ville>Paris</ville>
+                <pays codeLang="fr-FR">FRANCE</pays>
             </adresse>
         </adresses>
         <emails>
-            <email type=""></email>
-            <email type=""></email>
+            <email type="personnel">jean_durand@yahoo.fr</email>
+            <email type="professionel">jdurand@acme.com</email>
         </emails>
     </contact>
     <!-- une entrée du rolodex -->
