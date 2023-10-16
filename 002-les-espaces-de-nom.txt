@@ -1,0 +1,11 @@
+Les espaces de noms : permet d'utiliser des vocabulaires.
+
+Équivalent de "dialectes" XML qui ont été définis pour des utilisations diverses.
+Plutôt que de redéfinir des dialectes à chaque besoin d'un fichier XML, on fait appel à eux et pour les utiliser on défini un "espace de nom", qui sera ensuite utilisé en préfixe des balises requérant le vocabulaire appelé.
+
+Un dialecte standard existe, le « Dublin Core » https://www.dublincore.org/specifications/dublin-core/dcmi-terms/ , il contient une quinzaine d’élément dont title, creator, subject et date pour pouvoir décrire les caractéristiques principales d’un document (ou métadonnées). 
+Le Dublin Core est international, et il est recommandé de l’utiliser pour éviter d’introduire de nouveau vocabulaires.
+
+« DocBook » est un autre vocabulaire qui permet de décrire les métadonnées d’un document https://tdg.docbook.org/tdg/5.1/.
+
+« Xinclude » https://www.w3.org/TR/xinclude/ permet d’inclure dans les fichier XML d’autre fichiers XML.

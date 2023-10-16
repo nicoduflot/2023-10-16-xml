@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- on déclare docbook comme le vocabulaire par défaut -->
+<book version="5.1" xml:lang="fr"
+    xmlns="https://tdg.docbook.org/tdg/5.1/" 
+    xmlns:dc="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+    <!-- titre du document (vocabulaire book) -->
+    <title>Pourquoi j'ai mangé mon père</title>
+    <!-- vocabulaire dublin core pour la description des métadonnées du livre -->
+    <dc:description>
+        <dc:title></dc:title>
+        <dc:creator></dc:creator>
+        <dc:date></dc:date>
+        <dc:identifier>urn:isbn:2266084372</dc:identifier>
+    </dc:description>
+
+    <!-- 
+        il est possible ensuite d'écrire les chapitres ou un résumé des premiers chapitres ici,
+        mais plutôt que de les écrire directement dans ce fichier, il est possible d'inclure des fichiers grace au 
+        vocabulaire xinclude
+    -->
+    <xi:include href="./book/introduction.xml" parse="xml" />
+    <xi:include href="./book/chapitre01.xml" parse="xml" />
+    <xi:include href="./book/chapitre02.xml" parse="xml" />
+    <xi:include href="./book/chapitre03.xml" parse="xml" />
+    <xi:include href="./book/chapitre04.xml" parse="xml" />
+</book>
