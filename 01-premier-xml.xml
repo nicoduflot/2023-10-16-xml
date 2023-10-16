@@ -13,7 +13,7 @@ Standalone : l'autonomie du document, est-ce que le document est rattaché à un
 
 -->
 <!-- Élément racine -->
-<rolodex>
+<rolodex lang="fr">
     <!-- une entrée du rolodex -->
     <contact type="Physique">
         <nom>Durand</nom>
