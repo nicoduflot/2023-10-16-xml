@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+Le prologue 
+La première ligne d'un document, elle donne les informations de traitement
+
+version : la version XML utilisée, il en existe deux, 1.0 et la 1.1
+Les W3C préconise la 1.0
+
+encoding : le codage des caractère, le jeu de caractère qui sera utilisé dans le document.
+De base c'est UTF-8 (Universal character set Tranformation Format 8 bits), certains éditeurs enregistrent sous le format ISO8859-1 (il suffit de le changer dans le prologue).
+
+Standalone : l'autonomie du document, est-ce que le document est rattaché à un autre (par exemple pour les schémas qui norment le XML comme les DTD ou les XSD), pour le premier fichier, il est utilisable seul, donc standalone="yes"
+
+-->
+<!-- Élément racine -->
+<rolodex>
+    <!-- une entrée du rolodex -->
+    <contact type="Physique">
+        <nom>Durand</nom>
+        <prenom>Jean</prenom>
+        <adresses>
+            <adresse type="">
+                <numero></numero>
+                <voie type=""></voie>
+                <codepostal></codepostal>
+                <ville></ville>
+                <pays codeLang=""></pays>
+            </adresse>
+            <adresse type="">
+                <numero></numero>
+                <voie type=""></voie>
+                <codepostal></codepostal>
+                <ville></ville>
+                <pays codeLang=""></pays>
+            </adresse>
+            <adresse type="">
+                <numero></numero>
+                <voie type=""></voie>
+                <codepostal></codepostal>
+                <ville></ville>
+                <pays codeLang=""></pays>
+            </adresse>
+        </adresses>
+        <emails>
+            <email type=""></email>
+            <email type=""></email>
+        </emails>
+    </contact>
+    <!-- une entrée du rolodex -->
+    <contact type="Morale">
+        <nom>Acme Inc.</nom>
+        <adresses>
+            <adresse type="">
+                <numero></numero>
+                <voie type=""></voie>
+                <codepostal></codepostal>
+                <ville></ville>
+                <pays codeLang=""></pays>
+            </adresse>
+            <adresse type="">
+                <numero></numero>
+                <voie type=""></voie>
+                <codepostal></codepostal>
+                <ville></ville>
+                <pays codeLang=""></pays>
+            </adresse>
+            <adresse type="">
+                <numero></numero>
+                <voie type=""></voie>
+                <codepostal></codepostal>
+                <ville></ville>
+                <pays codeLang=""></pays>
+            </adresse>
+        </adresses>
+        <emails>
+            <email type=""></email>
+            <email type=""></email>
+            <email type=""></email>
+        </emails>
+    </contact>
+</rolodex>
