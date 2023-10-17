@@ -235,13 +235,33 @@ Dublin Core
 <!-- autre exemple -->
 <artist name="Nick Cave" artistID="NC"/>
 <album name="Murder Ballads" albumArtistID="NC"/>
+<album name="The boatman's call" albumArtistID="NC"/>
 
 <!ELEMENT artist EMPTY>
-    <!ATTLIST artist name CDATA #REQUIRED>
-    <!ATTLIST artist artistID ID #REQUIRED>
+<!ATTLIST artist name CDATA #REQUIRED>
+<!ATTLIST artist artistID ID #REQUIRED>
+
 <!ELEMENT album EMPTY>
-    <!ATTLIST album name CDATA #REQUIRED>
-    <!ATTLIST album albumArtistID IDREF #IMPLIED>
+<!ATTLIST album name CDATA #REQUIRED>
+<!ATTLIST album albumArtistID IDREF #IMPLIED>
+
+
+<!-- exemple IDREFS (plusieurs élément référence le même élément -->
+<artist name="Korn" artistID="K-0001" />
+<artist name="Ice Cube" artistID="IC-0002" />
+<artist name="Incubus" artistID="I-0003" />
+<artist name="Limp Bizkit" artistID="LB-0004" />
+<artist name="Orgy" artistID="O-0005" />
+<album name="Follow the leader" albumArtistID="K-0001" />
+<album name="Family values tour '98" albumArtistID="K-0001 IC-0002 I-0003 LB-0004 O-0005" />
+
+<!ELEMENT artist EMPTY>
+<!ATTLIST artist name CDATA #REQUIRED>
+<!ATTLIST artist artistID ID #REQUIRED>
+
+<!ELEMENT album EMPTY>
+<!ATTLIST album name CDATA #REQUIRED>
+<!ATTLIST album albumArtistID IDREFS #IMPLIED>
 
 <!-- attribut avec une valeur par dfaut -->
 <!ATTLIST adresse personne (physique | morale) "physique">
@@ -288,13 +308,13 @@ Dublin Core
 <!ENTITY citroen "Citroën">
 
 <voiture>
-    <marque>&dacia</marque>
+    <marque>&dacia;</marque>
 </voiture>
 <voiture>
-    <marque>&renault</marque>
+    <marque>&renault;</marque>
 </voiture>
 <voiture>
-    <marque>&citroen</marque>
+    <marque>&citroen;</marque>
 </voiture>
 
 <!-- 
@@ -330,8 +350,233 @@ Dublin Core
 <!-- autre exemple -->
 <!ENTITY % type "nom?, prenom?">
 <!ELEMENT contact (%type, surnom?)>
-<!ELEME?T personnage (%type, role)>
+<!ELEMENT personnage (%type, role)>
 
 <!-- traduit en DTD classique -->
 <!ELEMENT contact (nom?, prenom?, surnom?)>
 <!ELEME?T personnage (nom?, prenom?, role)>
+
+<!-- 
+    Entité externe 
+    Permetttent de faire référence, comme les entités générales, à des informations a utiliser dans le document 
+    xml, mais elle sont écrites et déclarées dans un fichier externe
+-->
+
+<!ENTITY dacia SYSTEM "dacia.xml">
+<!ENTITY renault SYSTEM "renault.xml">
+<!ENTITY citroen SYSTEM "citroen.xml">
+<voiture>
+    &dacia;
+</voiture>
+<voiture>
+    &renault;
+</voiture>
+<voiture>
+    &citroen;
+</voiture>
+
+
+<!-- dacia.xml -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE description [
+    <!ELEMENT description (marque, modele, portes)>
+    <!ELEMENT marque (#PCDATA)>
+    <!ELEMENT modele (#PCDATA)>
+    <!ELEMENT portes (#PCDATA)>
+]>
+<description>
+    <marque>
+        Dacia
+    </marque>
+    <modele>
+        Sandero
+    </modele>
+    <portes>
+        5
+    </portes>
+</description>
+
+<!-- 
+    Autre schéma de validation XML : XSD (Xml Schema Definition)
+    Pourquoi ? 
+    les DTD ne sont pas au format XML, c'est un nouveau langage avec sa propre syntaxe et ses règles.
+    => il faut l'utiliser avec xml et il se peut que certaines API liront le XML et les DTD de façons différentes?
+    Enfin, on ne peut pas typer les données, on indique juste qu'une balise contient ou non des données 
+    mais impossible de préciser si c'est une chaîne de caractère, un nombre, etc.
+    
+    Le xsd permet de typer les données, il est plus précis sur l'écriture des contraintes, il s'écrit en xml, 
+    se stocke dans un fichier externe ayant l'extension .xsd, il utilise comme les fichiers xml un prologue 
+    dont le nom de l'élément racine nous est imposé
+-->
+
+<!-- prologue d'un fichier .xsd -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- élément racine -->
+<xsd:schema xmlns="http://www.w3.org/2001/XMLSchema">
+</xsd:schema>
+
+<!-- on déclare un espace de nom avec xmlns:xsd, de fait, tous les éléments du xsd seront préfixés par xsd: -->
+
+<!-- 
+    il faut ensuite rattacher ce fichier de schéma au xml concerné par le xsd
+    il faut déclarer l'attachement du fichier dans la balise racine du xml
+    mais pour appeler ce fichier il faut utiliser le vocabulaire schema-instance
+-->
+
+<!-- xsd ne décrivant pas d'espace de nom -->
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<agenda xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="agenda.xsd">
+    <!-- schemaLocation déclare un xsd ne décrivant pas un espace de nom -->
+    <rolodex>
+        <nom>
+            Durant
+        </nom>
+    </rolodex>
+    <garage>
+        <voiture>
+            <marque>
+                Opel
+            </marque>
+        </voiture>
+    </garage>
+</agenda>
+
+<!-- xsd déclarant un espace de nom -->
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<agenda xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:Contact contact.xsd" xsi:schemaLocation="urn:Garage garage.xsd">
+    <!-- schemaLocation déclare un xsd décrivant un espace de nom -->
+    <Contact:contact xmlns:Contact="urn:Contact">
+        <Contact:nom>
+            Durant
+        </Contact:nom>
+    </Contact:contact>
+    <Garage:garage xmlns:Garage="urn:Garage">
+        <Garage:voiture>
+            <Garage:marque>
+                Opel
+            </Garage:marque>
+        </Garage:voiture>
+    </Garage:garage>
+</agenda>
+
+<!-- 
+    Déclaration des éléments
+    Deux type d'éléments : simples et complexes
+
+    Élément simple : 
+    une balise, sans attribut, ne contenant pas d'autre balise, dont le type de donnée contenu est simple
+    
+    Élément comlexe : 
+    une balise qui contient d'autre balise, ou que le type de donnée est complexe, ou qu'elle contient au moins un attribut.
+-->
+
+<!-- ni atribut, ni élément et donnée simple => élément simple -->
+<nom>Duflot</nom>
+
+<!-- Contient un attribut : personne est un élément complexe -->
+<!-- attribut type : contient une donnée simple => élément simple -->
+<personne type="physique">Nicolas Duflot</personne>
+
+<!-- Élement comple (contient d'autres balise -->
+<personne>
+    <!-- Élément complexe (contient un attribut) -->
+    <nom type="usage">Duflot</nom>
+    <nom type="jeune-fille">Duflot</nom>
+    <!-- Élement simple (ni attribut ni balise) -->
+    <prenom>Tiphaine</prenom>
+</personne>
+
+<!-- 
+    déclarer  un élément simple
+    mot clef : element (avec le namespace déterminé, pour l'exemple xsd)
+-->
+
+<nom>Duflot</nom>
+<prenom>Nicolas</prenom>
+<age>43</age>
+
+<!-- en xsd -->
+<xsd:element name="nom" type="xsd:string" />
+<xsd:element name="prenom" type="xsd:string" />
+<xsd:element name="age" type="xsd:int" />
+
+<!-- valeurs par défaut -->
+<xsd:element name="nom" type="xsd:string" default="Doe" />
+<xsd:element name="prenom" type="xsd:string" default="John" />
+<xsd:element name="age" type="xsd:int" />
+
+<!-- exemple de xml valides avec ce schéma -->
+<!-- ex n°1 -->
+<nom>Duflot</nom>
+<prenom>Nicolas</prenom>
+<age>43</age>
+
+<!-- ex n°1 -->
+<nom></nom>         <!-- valeur par défaut "Doe"-->
+<prenom>Nicolas</prenom>
+<age>43</age>
+
+<!-- ex n°2 -->
+<nom>Duflot</nom>
+<prenom></prenom>   <!-- valeur par défaut "John"-->
+<age>43</age>
+
+<!-- ex n°3 -->
+<nom></nom>         <!-- valeur par défaut "Doe"-->
+<prenom></prenom>   <!-- valeur par défaut "John"-->
+<age>43</age>
+
+<!-- ex n°4 -->
+<nom></nom>         <!-- valeur par défaut "Doe"-->
+<prenom></prenom>   <!-- valeur par défaut "John"-->
+<age></age>         <!-- il n'y a pas de valeur par défaut, mais peut être vide car non obligatoire -->
+
+<!-- 
+    Valeurs constantes
+    Constante : valeur inchangeable, imposée et non valide si la balise est vide
+-->
+
+<xsd:element name="status" type="xsd:string" fixed="Employé·e" />
+<!-- valide -->
+<status>Employé·e</status>
+<!-- invalide car donnée <> Employé·e -->
+<status>Junior</status>
+<!-- invalide car donnée absente -->
+<status></status>
+
+<!-- 
+    Les attributs
+
+    Se sont par essence des éléments simples, et le mot clef pour les déclarer 
+    n'est pas element mais attribute (ne pas oublier le namespace xsd)
+
+    on déclare un attribut avec les attributs name et type
+-->
+
+<personne type="physique"></personne>
+
+<!-- attribut personne -->
+<xsd:attribute name="type" type="xsd:string" />
+<!-- 
+    la déclaration de cet attribut intervient évidement lors de la déclaration 
+    de l'élément personne, qui lui est un élément complexe, on verra sa déclaration plus tard 
+-->
+
+<!-- valeurs par défaut, valeurs inchangeables (constante), valeurs obligatoires -->
+<!-- par défaut -->
+<xsd:attribute name="type" type="xsd:string" default="physique" />
+<!-- constante -->
+<xsd:attribute name="devise" type="xsd:string" fixed="euro" />
+<!-- valide -->
+<prix devise="euro">23.5</prix>
+<!-- valide -->
+<prix devise="">23.5</prix>
+
+<!-- l'attribut type doit être obligatoirement renseigné dans la balise personne -->
+<xsd:attribute name="type" type="xsd:string" use="required" />
+<!-- valide -->
+<personne type="physique"></personne>
+<!-- invalide -->
+<personne type=""></personne>
+<!-- invalide -->
+<personne></personne>
