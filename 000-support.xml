@@ -861,3 +861,54 @@ Dublin Core
         <xsd:attribute name="type" type="xsd:string" />
     </xsd:complextype>
 </xsd:element>
+
+<!-- 
+    réutiliser les types : simplifier l'écriture et la lecture d'un schéma
+-->
+
+<banque>
+    <!-- 1er client -->
+    <client>
+        <identite>
+            <nom>Adams</nom>
+            <prenom>Douglas</prenom>
+            <adresse>
+                <numero>21</numero>
+                <voie>Baker Street</voie>
+                <codePostal>W1U 8ED</codePostal>
+                <ville>Londre</ville>
+                <pays>Angleterre</pays>
+            </adresse>
+        </identite>
+        <!-- liste des comptes bancaires du client -->
+        <comptes>
+            <compteInteret interets="1.5" nom="Livret A">
+                <montant>2500</montant>
+            </compteInteret>
+            <compte>
+                <montant>4200</montant>
+            </compte>
+        </comptes>
+    </client>
+</banque>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="banque">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="client" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="identite">
+                                
+                            </xsd:element>
+                            <xsd:element name="comptes">
+
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
