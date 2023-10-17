@@ -580,3 +580,138 @@ Dublin Core
 <personne type=""></personne>
 <!-- invalide -->
 <personne></personne>
+
+<!-- les types de valeurs pour les élément et les attributs -->
+<!-- string -->
+<xsd:element name="string" type="xsd:string" />
+<string>Karamasov</string>
+<string>Une phrase choc</string>
+<!-- certains caractères spéciaux, tel &, doivent être écrits avec la notation HTML & => &amp; -->
+<string>&amp;</string>
+
+<!-- language -->
+<xsd:element name="langue" type="xsd:language" />
+<!-- 
+    norme code langue 
+    deux lettres de base ISO 639 (code de la langue)
+    peut être suivi par deux lettres ISO 3166 (code du pays)
+    XX      (seul le code langue)
+    XX-YY   (code langue-code pays)
+-->
+<langue>fr-FR</langue>
+<langue>fr-CA</langue>
+<langue>en</langue>
+<langue>en-US</langue>
+<langue>en-GB</langue>
+<langue>en-CA</langue>
+
+<!--
+    nmtoken string sans espace et seulement avec les caractère spéciaux acceptés .-_ et : 
+    ne peut être utilisé que pour un attribut
+-->
+<xsd:attribute name="myToken" type="xsd:NMTOKEN" />
+<balise myToken="A:B_B-2.3">Contenu de la balise</balise>
+
+<!--
+    nmtokens : liste de nttoken, séparés par un espace, mais seulement avec les caractère spéciaux acceptés .-_ et : 
+    ne peut être utilisé que pour un attribut
+-->
+<xsd:attribute name="myTokens" type="xsd:NMTOKENS" />
+<balise myTokens="A:B_B-2.3">Contenu de la balise</balise>
+<balise myTokens="A:B_B-2.3 AZERTY 123456">Contenu de la balise</balise>
+
+<!-- ID IDREF -->
+<xsd:attribute name="num" type="ID" />
+<xsd:attribute name="parent" type="IDREF" />
+<personne num="P1">Paul</personne>
+<personne num="P2">JP</personne>
+<personne num="P3" parent="P1">Martin</personne>
+<personne num="P4" parent="P2">Camille</personne>
+
+<!-- ID IDREFS -->
+<xsd:attribute name="num" type="ID" />
+<xsd:attribute name="parents" type="IDREFS" />
+<personne num="P0" parents="">Clotaire</personne>
+<personne num="P1" parents="">JP</personne>
+<personne num="P2" parents="">Marie</personne>
+<personne num="P3" parents="P0">Astrid</personne>
+<personne num="P4" parentss="P0">Paul</personne>
+<personne num="P5" parents="P1 P3">Martin</personne>
+<personne num="P6" parents="P2 P4">Camille</personne>
+
+<!-- 
+    Entity 
+    entity permet de faire référence à une entité, le plus souvent non XML et déclarés dans les fichier DTD
+    ce type n'est a utiliser que pour les attributs
+-->
+<xsd:attribute name="marque" type="xsd:ENTITY" />
+<!ENTITY samsung "Samsung">
+<!ENTITY apple "Apple">
+<telephone marque="samsung">Galaxy SII</telephone>
+<telephone marque="apple">Iphone 28</telephone>
+
+<!-- ENTITIES -->
+<xsd:attribute name="marque" type="xsd:ENTITIES" />
+<!ENTITY samsung "Samsung">
+<!ENTITY apple "Apple">
+<telephone marque="samsung apple" />
+
+<!-- les éléments et les types complexes-->
+<!-- personne élément complexe -->
+<personne>
+    <!-- élément simple -->
+    <nom>Robert</nom>
+    <!-- élément simple -->
+    <prenom>Axel</prenom>
+</personne>
+
+<!-- élément complexe car contient un attribut -->
+<personne type="physique">Axel Robert</personne>
+
+
+<personne attr="test">
+    <!-- contient d'autres balises -->
+</personne>
+
+<xsd:element name="personne">
+    <xsd:complexType>
+        <!-- la déclaration des attributs de l'élément et les déclarations des autres éléments et attributs à l'intérieur -->
+    </xsd:complexType>
+</xsd:element>
+
+<!--
+    éléments complexes avec du contenu simple
+-->
+<prix devise="euro">5600</prix>
+<voiture marque="Renault" moteur="essence">Clio</voiture>
+
+<!-- élément prix -->
+<xsd:element name="prix">
+    <!-- indiquer qu'il s'agit d'un élément complexe -->
+    <xsd:complexType>
+        <!-- préciser que son contenu est simple -->
+        <xsd:simpleContent>
+            <!-- on déclare le contenu simple de la balise, ici avec une extension pour préciser le type du contenu -->
+            <xsd:extension base="xsd:positiveInteger">
+                <!-- déclarer l'attribut devise de la balise prix -->
+                <xsd:attribute name="devise" type="xsd:string" />
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+</xsd:element>
+
+<!-- élément voiture -->
+<xsd:element name="voiture">
+    <!-- indiquer qu'il s'agit d'un élément complexe -->
+    <xsd:complexType>
+        <!-- préciser que son contenu est simple -->
+        <xsd:simpleContent>
+            <!-- on déclare le contenu simple de la balise, ici avec une extension pour préciser le type du contenu -->
+            <xsd:extension base="xsd:string">
+                <!-- déclarer les attributs marque et moteur de la balise voiture -->
+                <xsd:attribute name="devise" type="xsd:string" />
+                <xsd:attribute name="devise" type="xsd:string" />
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+</xsd:element>
