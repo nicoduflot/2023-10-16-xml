@@ -709,9 +709,155 @@ Dublin Core
             <!-- on déclare le contenu simple de la balise, ici avec une extension pour préciser le type du contenu -->
             <xsd:extension base="xsd:string">
                 <!-- déclarer les attributs marque et moteur de la balise voiture -->
-                <xsd:attribute name="devise" type="xsd:string" />
-                <xsd:attribute name="devise" type="xsd:string" />
+                <xsd:attribute name="marque" type="xsd:string" />
+                <xsd:attribute name="moteur" type="xsd:string" />
             </xsd:extension>
         </xsd:simpleContent>
     </xsd:complexType>
+</xsd:element>
+
+<!-- balise contenant d'autres balises -->
+<personne type="physique">
+    <prenom>Axel</prenom>
+    <nom>Robert</nom>
+</personne>
+
+<xsd:element name="personne">
+    <xsd:complexType>
+        <xsd:sequence>
+            <xsd:element name="prenom" type="xsd:string" />
+            <xsd:element name="nom" type="xsd:string" />
+        </xsd:sequence>
+        <xsd:attribute name="type" type="xsd:string" />
+    </xsd:complexType>
+</xsd:element>
+
+<!-- ATTENTION : sequence implique que l'ordre des balise dans le XML doivent être du même ordre que dans la déclaration -->
+<!-- en utilisant all au lieu de sequence, il est possible de déclarer les balises contenues dans n'importe quel ordre -->
+<personne type="physique">
+    <prenom>Axel</prenom>
+    <nom>Robert</nom>
+</personne>
+
+<xsd:element name="personne">
+    <xsd:complexType>
+        <xsd:all>
+            <xsd:element name="nom" type="xsd:string" />
+            <xsd:element name="prenom" type="xsd:string" />
+        </xsd:all>
+        <xsd:attribute name="type" type="xsd:string" />
+    </xsd:complexType>
+</xsd:element>
+<!-- certaines balises ne sont pas obligatoire, il est possible de les déclarer, dans une liste de choix, utilisée ou non -->
+
+<personne type="physique">
+    <prenom>Axel</prenom>
+    <nom>Robert</nom>
+</personne>
+<personne type="morale">
+    <nom>GloboCorp Inc.</nom>
+</personne>
+<personne type="physique">
+    <prenom>Jéjé</prenom>
+</personne>
+<personne type="physique"></personne>
+
+<!-- avec le mot clef choice, il est possible de rendre les balises facultatives-->
+<xsd:element name="personne">
+    <xsd:complexType>
+        <xsd:choice>
+            <xsd:element name="nom" type="xsd:string" />
+            <xsd:element name="prenom" type="xsd:string" />
+        </xsd:choice>
+    </xsd:complexType>
+    <xsd:attribute name="type" type="xsd:string" />
+</xsd:element>
+
+<!-- une type complexe dans un type complexe -->
+<personne>
+    <identite>
+        <nom>Vance</nom>
+        <prenom>Jack</prenom>
+    </identite>
+</personne>
+
+<xsd:element name="personne">
+    <xsd:complexType>
+        <xsd:all>
+            <xsd:element name="identite">
+                <xsd:complexType>
+                    <xsd:all>
+                        <xsd:element name="nom" type="xsd:string" />
+                        <xsd:element name="prenom" type="xsd:string" />
+                    </xsd:all>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:all>
+    </xsd:complexType>
+</xsd:element>
+
+<!-- contenu mixte -->
+<description>
+    Une console de <b>80</b>x<b>120</b>cm, <prix>200</prix> euro
+</description>
+
+<facture>
+    L'acheteur <acheteur>Brendan L. Mulligan</acheteur>, doit payer la somme de <somme>1000</somme> euros
+</facture>
+
+<xsd:element name="facture">
+    <xsd:complexType mixed="true">
+        <xsd:sequence>
+            <xsd:element name="acheteur" type="xsd:string" />
+            <xsd:element name="somme" type="xsd:float" />
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:element>
+
+<!-- nb d'occurence : le nombre minimal et maximal d'occurence d'un élément -->
+<personne type="personne">
+    <nom>Robert</nom>
+    <prenom>Axel</prenom>
+    <prenom>Maurice</prenom>
+    <prenom>Marcel</prenom>
+</personne>
+
+<xsd:element name="personne">
+    <xsd:complextype>
+        <xsd:sequence>
+            <xsd:element name="nom" type="xsd:string" />
+            <!-- on peut écrire de 1 à 3 prénoms -->
+            <xsd:element name="prenom" type="xsd:string" 
+                minOccurs="1" 
+                maxOccurs="3" />
+        </xsd:sequence>
+        <xsd:attribute name="type" type="xsd:string" />
+    </xsd:complextype>
+</xsd:element>
+
+<!-- de 0 à X occurence -->
+<personne type="personne">
+    <nom>Robert</nom>
+    <prenom>Axel</prenom>
+    <prenom>Maurice</prenom>
+    <prenom>Marcel</prenom>
+    <prenom>Jean</prenom>
+    <prenom>Michel</prenom>
+    <prenom>Oui</prenom>
+</personne>
+<personne type="personne">
+    <nom>Globocorp Inc.</nom>
+</personne>
+
+<xsd:element name="personne">
+    <xsd:complextype>
+        <xsd:sequence>
+            <xsd:element name="nom" type="xsd:string" />
+            <!-- on peut écrire de 1 à 3 prénoms -->
+            <xsd:element name="prenom" type="xsd:string" 
+                minOccurs="0" 
+                maxOccurs="unbounded" />
+        </xsd:sequence>
+        <xsd:attribute name="type" type="xsd:string" />
+    </xsd:complextype>
 </xsd:element>

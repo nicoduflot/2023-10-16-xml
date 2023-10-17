@@ -11,5 +11,6 @@
                 <ville>Paris</ville>
             </adresse>
         </adresses>
+        <!-- balise emails -->
     </personne>
 </rolodex>
