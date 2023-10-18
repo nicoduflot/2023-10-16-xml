@@ -3,6 +3,9 @@
     <!-- balises isolées enfants direct de personne -->
     <!-- nom prenom -->
 
+    <xsd:element name="nom" type="xsd:string" />
+    <xsd:element name="prenom" type="xsd:string" />
+
     <!-- balises enfants directs d'adresse -->
     <!-- 
         numero 
@@ -21,6 +24,33 @@
         pays
     -->
 
+    <xsd:element name="numero" type="xsd:string"/>
+    <xsd:element name="voie">
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="type">
+                        <xsd:simpleType>
+                            <xsd:restriction base="xsd:string">
+                                <xsd:enumeration value="impasse"/>
+                                <xsd:enumeration value="avenue"/>
+                                <xsd:enumeration value="rue"/>
+                                <xsd:enumeration value="route"/>
+                                <xsd:enumeration value="chemin"/>
+                                <xsd:enumeration value="place"/>
+                                <xsd:enumeration value="faubourg"/>
+                                <xsd:enumeration value="boulevard" />
+                            </xsd:restriction>
+                        </xsd:simpleType>
+                    </xsd:attribute>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="codePostal" type="xsd:string"/>
+    <xsd:element name="ville" type="xsd:string"/>
+    <xsd:element name="pays" type="xsd:string"/>
 
     <!-- balises enfants directs de telephones -->
     <!-- 
@@ -29,6 +59,24 @@
             bureau
             portable
     -->
+
+    <xsd:element name="telephone">
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="type">
+                        <xsd:simpleType>
+                            <xsd:restriction base="xsd:string">
+                                <xsd:enumeration value="fixe"/>
+                                <xsd:enumeration value="bureau"/>
+                                <xsd:enumeration value="portable"/>
+                            </xsd:restriction>
+                        </xsd:simpleType>
+                    </xsd:attribute>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
 
     <!-- balises enfants directs d'emails -->
 
@@ -63,14 +111,72 @@
 
     <!-- balise adresse avec ref des balises dans adresse -->
 
+    <xsd:element name="adresse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="numero" />
+                <xsd:element ref="voie" />
+                <xsd:element ref="codePostal" />
+                <xsd:element ref="ville" />
+                <xsd:element ref="pays" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
     <!-- balise telephones (ref de la balise telephone) -->
+
+    <xsd:element name="telephones">
+        <xsd:complexType>
+            <xsd:choice>
+                <xsd:element ref="telephone" maxOccurs="unbounded" />
+            </xsd:choice>
+        </xsd:complexType>
+    </xsd:element>
 
     <!-- balise emails (ref de la balise email) -->
 
+    <!-- balise emails -->
+
+    <xsd:element name="emails">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="email" maxOccurs="unbounded" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
     <!-- balise personne (ref des balise qui composent personne) -->
+
+    <xsd:element name="personne">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="nom" />
+                <xsd:element ref="prenom" minOccurs="0" maxOccurs="unbounded" />
+                <xsd:element ref="adresse" />
+                <xsd:element ref="telephones" />
+                <xsd:element ref="emails" />                
+            </xsd:sequence>
+            <!-- définir l'attribut type -->
+            <xsd:attribute name="type">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="physique"/>
+                        <xsd:enumeration value="morale"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
 
     <!-- balise racine repertoire (ref de la balise personne) -->
     
-    
+    <xsd:element name="repertoire">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="personne" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
 
 </xsd:schema>
