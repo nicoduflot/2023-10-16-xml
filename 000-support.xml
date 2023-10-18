@@ -900,14 +900,183 @@ Dublin Core
                     <xsd:complexType>
                         <xsd:sequence>
                             <xsd:element name="identite">
-                                
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="nom" type="xsd:string" />
+                                        <xsd:element name="prenom" type="xsd:string" />
+                                        <xsd:element name="adresse">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element name="numero" type="xsd:string" />
+                                                    <xsd:element name="voie" type="xsd:string" />
+                                                    <xsd:element name="codePostal" type="xsd:string" />
+                                                    <xsd:element name="ville" type="xsd:string" />
+                                                    <xsd:element name="pays" type="xsd:string" />
+                                                </xsd:sequence>
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                    </xsd:sequence>
+                                </xsd:complexType>
                             </xsd:element>
                             <xsd:element name="comptes">
-
+                                <xsd:complexType>
+                                    <xsd:choice>
+                                        <xsd:element name="compteInterets">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element name="montant" type="xsd:double" />
+                                                </xsd:sequence>
+                                                <xsd:attribute name="interets" type="xsd:float" />
+                                                <xsd:attribute name="nom" type="xsd:string" />
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                        <xsd:element name="compte">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element name="montant" type="xsd:double" />
+                                                </xsd:sequence>
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                    </xsd:choice>
+                                </xsd:complexType>
                             </xsd:element>
                         </xsd:sequence>
                     </xsd:complexType>
                 </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
+
+<!-- 
+    les xsd deviennent très difficiles à lire (et à écrire !), on peut les découper  
+    en morceaux réutilisables pour les appliquer et rendre les xsd plus lisibles
+    on utilisera le mot-clef ref
+-->
+
+<!-- déclaration des éléments en global -->
+
+<xsd:element name="nom" type="xsd:string" />
+<xsd:element name="prenom" type="xsd:string" />
+<xsd:element name="numero" type="xsd:string" />
+<xsd:element name="voie" type="xsd:string" />
+<xsd:element name="codePostal" type="xsd:string" />
+<xsd:element name="ville" type="xsd:string" />
+<xsd:element name="pays" type="xsd:string" />
+
+<!-- groupe des éléments de l'adresse -->
+
+<xsd:group name="grp-adresse">
+    <xsd:sequence>
+        <xsd:element ref="numero" />
+        <xsd:element ref="voie" />
+        <xsd:element ref="codePostal" />
+        <xsd:element ref="ville" />
+        <xsd:element ref="pays" />
+    </xsd:sequence>
+</xsd:group>
+
+<!-- créer l'élément adresse -->
+<xsd:element name="adresse">
+    <xsd:complexType>
+        <xsd:group ref="grp-adresse" />
+    </xsd:complexType>
+</xsd:element>
+
+<!-- créer le groupe identité -->
+
+<xsd:group name="grp-identite">
+    <xsd:sequence>
+        <xsd:element ref="nom" />
+        <xsd:element ref="prenom" />
+        <xsd:element ref="adresse" />
+    </xsd:sequence>
+</xsd:group>
+
+<!-- déclaration de l'élément identité -->
+<xsd:element name="identite">
+    <xsd:complexType>
+        <xsd:group ref="grp-identite" />
+    </xsd:complexType>
+</xsd:element>
+
+<!-- 
+on peut créer ses propres types car ici, livret A et compte courant ont le même format 
+on déclare donc ses propre types
+ex déclaration d'un type simple
+____________________________________
+<xsd:simpleType name="mon_type_perso">
+    <xsd:restriction base="mon_type_perso">
+        ...
+    </xsd:restriction>
+</xsd:simpleType>
+
+utilisation du type simple
+____________________________________
+<xsd:element name="mon_nom" type="mon_type_perso" />
+
+
+déclaration type complexe
+____________________________________
+<xsd:complexType name="mon_type_perso">
+
+</xsd:complexType>
+
+utilisation du type complexe
+____________________________________
+<xsd:element name="mon_nom" type="mon_type_perso" />
+-->
+
+<!-- déclaration d'un type compte général -->
+
+<!-- le montant en global -->
+<xsd:element name="montant" type="double" />
+
+<xsd:complexType name="compte">
+    <xsd:sequence>
+        <xsd:element ref="montant" />
+    </xsd:sequence>
+</xsd:complexType>
+
+<!-- création du type compte intérets-->
+
+<xsd:complexType name="compteInterets">
+    <xsd:complexContent>
+        <xsd:extension base="compte">
+            <xsd:attribute name="nom" type="xsd:string" />
+            <xsd:attribute name="interets" type="xsd:float" />
+        </xsd:extension>
+    </xsd:complexContent>
+</xsd:complexType>
+
+<!-- création de la partie comptes -->
+<xsd:element name="comptes">
+    <xsd:complexType>
+        <xsd:choice>
+            <xsd:element name="lep" type="compteInterets" />
+            <xsd:element name="bourse" type="compteInterets" />
+            <xsd:element name="livretA" type="compteInterets" />
+            <xsd:element name="compte" type="compte" />
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:element>
+
+<!-- création de la partie client -->
+<xsd:element name="client">
+    <xsd:complexType>
+        <xsd:sequence>
+            <xsd:element ref="identité" />
+            <xsd:element ref="comptes" />
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:element>
+
+<!-- schema finale du xsd -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:element name="banque">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="client" maxOccurs="unbounded" />
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
